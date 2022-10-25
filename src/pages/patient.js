@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { oauth2 as SMART } from "fhirclient";
 
 export default function Patient() {
@@ -6,16 +6,23 @@ export default function Patient() {
     const [client, setClient] = useState(undefined);
     const [patientError, setPatientError] = useState(undefined);
     const [patient, setPatient] = useState(undefined);
+    const clientReady = useRef(false)
 
     useEffect(() => {
-        SMART.ready().then(
-            (client) => setClient(client),
-            (error) => {
-                console.log("SMART ready error " + JSON.stringify(error));
-            }
-        );
-    }, [])  // eslint-disable-line react-hooks/exhaustive-deps
-
+        if(!clientReady.current) {
+            clientReady.current = true;
+            console.log("Initializing SMART...");
+            SMART.ready().then(
+                (client) => {
+                    console.log("SMART client ready");
+                    setClient(client)
+                },
+                (error) => {
+                    console.log("SMART ready error " + JSON.stringify(error));
+                }
+            );
+        }
+    }, [])  
 
     useEffect(() => {
         if(client) {
@@ -30,7 +37,7 @@ export default function Patient() {
                 setPatientError(error);
             });
         }
-    }, [client])  // eslint-disable-line react-hooks/exhaustive-deps
+    }, [client])  
 
 
     const patientErrorBanner = () => {
