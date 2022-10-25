@@ -4,7 +4,7 @@ import { oauth2 as SMART } from "fhirclient";
 export default function Patient() {
 
     const [client, setClient] = useState(undefined);
-    const [clientError, setClientError] = useState(undefined);
+    const [patientError, setPatientError] = useState(undefined);
     const [patient, setPatient] = useState(undefined);
 
     useEffect(() => {
@@ -12,7 +12,6 @@ export default function Patient() {
             (client) => setClient(client),
             (error) => {
                 console.log("SMART ready error " + JSON.stringify(error));
-                setClientError(error)
             }
         );
     }, [])  // eslint-disable-line react-hooks/exhaustive-deps
@@ -24,20 +23,20 @@ export default function Patient() {
             .then(patient => {
                 console.log("Patient read " + JSON.stringify(patient));
                 setPatient(patient);
-                setClientError(undefined);
+                setPatientError(undefined);
             })
             .catch(error => {
-                console.log("Client patient error " + JSON.stringify(error));
-                setClientError(error);
+                console.log("Patient read error " + JSON.stringify(error));
+                setPatientError(error);
             });
         }
     }, [client])  // eslint-disable-line react-hooks/exhaustive-deps
 
 
-    const clientErrorBanner = () => {
-        if(clientError) {
+    const patientErrorBanner = () => {
+        if(patientError) {
             return <div>
-                {JSON.stringify(clientError)}!
+                {JSON.stringify(patientError)}
             </div>
         } else {
             return <></>
@@ -71,7 +70,7 @@ export default function Patient() {
     }
 
     return (<div>
-        {clientErrorBanner()}
+        {patientErrorBanner()}
         {patientBanner()}
     </div>)
 }
