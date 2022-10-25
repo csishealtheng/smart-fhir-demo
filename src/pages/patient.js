@@ -3,12 +3,13 @@ import { oauth2 as SMART } from "fhirclient";
 
 export default function Patient() {
 
-    const [client, setClient] = useState(undefined);
-    const [patientError, setPatientError] = useState(undefined);
-    const [patient, setPatient] = useState(undefined);
+    const [client, setClient] = useState();
+    const [patientError, setPatientError] = useState();
+    const [patient, setPatient] = useState();
     const clientReady = useRef(false)
 
     useEffect(() => {
+        console.log("SMART useEffect");
         if(!clientReady.current) {
             clientReady.current = true;
             console.log("Initializing SMART...");
@@ -20,11 +21,12 @@ export default function Patient() {
                 (error) => {
                     console.log("SMART ready error " + JSON.stringify(error));
                 }
-            );
+            )
         }
     }, [])  
 
     useEffect(() => {
+        console.log("Read patient");
         if(client) {
             client.patient.read()
             .then(patient => {
