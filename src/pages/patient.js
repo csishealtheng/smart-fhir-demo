@@ -8,6 +8,7 @@ export default function Patient() {
     const [patient, setPatient] = useState();
     const clientReady = useRef(false)
 
+    // useEffect is called twice in React 18 *dev* mode, see https://stackoverflow.com/questions/72238175/useeffect-is-running-twice-on-mount-in-react
     useEffect(() => {
         console.log("SMART useEffect");
         if(!clientReady.current) {
@@ -26,18 +27,23 @@ export default function Patient() {
     }, [])  
 
     useEffect(() => {
-        console.log("Read patient");
         if(client) {
-            client.patient.read()
-            .then(patient => {
-                console.log("Patient read " + JSON.stringify(patient));
-                setPatient(patient);
-                setPatientError(undefined);
-            })
-            .catch(error => {
-                console.log("Patient read error " + JSON.stringify(error));
-                setPatientError(error);
-            });
+            console.log("Read patient...");
+            if(client.getPatientId()) {
+                console.log("Selected patient id " + client.getPatientId());
+                client.request("Patient/" + client.getPatientId())  // using client.patient.read() causes error in production but not in dev?
+                .then(patient => {
+                    console.log("Patient read " + JSON.stringify(patient));
+                    setPatient(patient);
+                    setPatientError(undefined);
+                })
+                .catch(error => {
+                    console.log("Patient read error " + JSON.stringify(error));
+                    setPatientError(error);
+                });    
+            } else {
+                console.log("No patient id set!");
+            }
         }
     }, [client])  
 
