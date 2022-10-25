@@ -17,7 +17,7 @@ function Launcher() {
     }, []);
 
     return (
-        <div>"Launching..."</div>
+        <div>Launching SMART App...</div>
     )
 
 }
