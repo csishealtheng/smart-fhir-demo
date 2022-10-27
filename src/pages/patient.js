@@ -31,22 +31,62 @@ export default function Patient() {
             console.log("Read patient...");
             if(client.getPatientId()) {
                 console.log("Selected patient id " + client.getPatientId());
-                client.request("Patient/" + client.getPatientId())  // using client.patient.read() causes error in production but not in dev?
-                .then(patient => {
-                    console.log("Patient read " + JSON.stringify(patient));
-                    setPatient(patient);
-                    setPatientError(undefined);
-                })
-                .catch(error => {
-                    console.log("Patient read error " + JSON.stringify(error));
-                    setPatientError(error);
-                });    
+                readPatient();
+                readObservationsForPatient();
+                readConditionsForPatient();
+                readMedicationOrdersForPatient();
             } else {
                 console.log("No patient id set!");
-            }
+            }            
         }
     }, [client])  
 
+    const readPatient = () => {
+        client.request("Patient/" + client.getPatientId())  // using client.patient.read() causes error in production but not in dev?
+        .then(patient => {
+            console.log("Patient read " + JSON.stringify(patient));
+            setPatient(patient);
+        })
+        .catch(error => {
+            console.log("Patient read error " + JSON.stringify(error));
+        });    
+    }    
+
+    const readObservationsForPatient = () => {
+        client.request("Observation?patient="+client.getPatientId(), {
+            pageLimit: 0
+        })
+        .then(observations => {
+            console.log("Observations read " + JSON.stringify(observations));
+        })
+        .catch(error => {
+            console.log("Observation read error " + JSON.stringify(error));
+        });    
+    }
+
+    const readConditionsForPatient = () => {
+        client.request("Condition?patient="+client.getPatientId(), {
+            pageLimit: 0
+        })
+        .then(observations => {
+            console.log("Conditions read " + JSON.stringify(observations));
+        })
+        .catch(error => {
+            console.log("Conditions read error " + JSON.stringify(error));
+        });    
+    }
+
+    const readMedicationOrdersForPatient = () => {
+        client.request("MedicationOrder?patient="+client.getPatientId(), {
+            pageLimit: 0
+        })
+        .then(observations => {
+            console.log("MedicationOrder read " + JSON.stringify(observations));
+        })
+        .catch(error => {
+            console.log("MedicationOrder read error " + JSON.stringify(error));
+        });    
+    }
 
     const patientErrorBanner = () => {
         if(patientError) {
