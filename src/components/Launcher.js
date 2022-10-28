@@ -6,13 +6,8 @@ function Launcher() {
 
     useEffect(() => {
         SMART.authorize({
-            clientId: "693a2772-1ebc-4f0d-b397-a134f1861746",
-            scope: "patient/Patient.read patient/Observation.read patient/MedicationRequest.read patient/Condition.read launch/patient online_access openid profile",
-            redirectUri: "http://localhost:3000/patient",
-            
-            // iss parameter set here when doing a standalone launch
-            //iss: "https://fhir-myrecord.cerner.com/dstu2/ec2458f2-1e24-41c8-b71b-0e701af7583d"
-
+            clientId: "d20a334f-5080-4e19-b1e3-641038d9c201",            
+            scope: "patient/Patient.read patient/Observation.read launch online_access openid profile"
         });
 
     }, []);
