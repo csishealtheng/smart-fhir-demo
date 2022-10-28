@@ -28,13 +28,18 @@ export default function Patient() {
 
     useEffect(() => {
         if(client) {
+            console.log("Id token: " + JSON.stringify(client.getIdToken()));
+            console.log("FhirUser: " + client.getFhirUser());
+            console.log("UserType: " + client.getUserType());
+            console.log("Token reposonse: " + JSON.stringify(client.getState("tokenResponse")));
+            
             console.log("Read patient...");
             if(client.getPatientId()) {
                 console.log("Selected patient id " + client.getPatientId());
                 readPatient();
                 readObservationsForPatient();
                 readConditionsForPatient();
-                readMedicationOrdersForPatient();
+                readMedicationRequestsForPatient();
             } else {
                 console.log("No patient id set!");
             }            
@@ -76,6 +81,7 @@ export default function Patient() {
         });    
     }
 
+    // DSTU2
     const readMedicationOrdersForPatient = () => {
         client.request("MedicationOrder?patient="+client.getPatientId(), {
             pageLimit: 0
@@ -85,6 +91,19 @@ export default function Patient() {
         })
         .catch(error => {
             console.log("MedicationOrder read error " + JSON.stringify(error));
+        });    
+    }
+
+    // R4
+    const readMedicationRequestsForPatient = () => {
+        client.request("MedicationRequest?patient="+client.getPatientId(), {
+            pageLimit: 0
+        })
+        .then(observations => {
+            console.log("MedicationRequest read " + JSON.stringify(observations));
+        })
+        .catch(error => {
+            console.log("MedicationRequest read error " + JSON.stringify(error));
         });    
     }
 

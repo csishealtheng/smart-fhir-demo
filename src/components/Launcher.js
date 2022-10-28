@@ -7,7 +7,7 @@ function Launcher() {
     useEffect(() => {
         SMART.authorize({
             clientId: "693a2772-1ebc-4f0d-b397-a134f1861746",
-            scope: "patient/Patient.read patient/Observation.read patient/MedicationOrder.read patient/Condition.read launch/patient online_access openid profile",
+            scope: "patient/Patient.read patient/Observation.read patient/MedicationRequest.read patient/Condition.read launch/patient online_access openid profile",
             redirectUri: "http://localhost:3000/patient",
             
             // iss parameter set here when doing a standalone launch
