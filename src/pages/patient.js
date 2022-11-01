@@ -39,10 +39,11 @@ export default function Patient() {
                 readPatient();
                 readObservationsForPatient();
                 readConditionsForPatient();
-                readMedicationRequestsForPatient();
+//                readMedicationRequestsForPatient();
+		        readMedicationOrdersForPatient();		    
             } else {
                 console.log("No patient id set!");
-            }            
+            }          
         }
     }, [client])  
 
